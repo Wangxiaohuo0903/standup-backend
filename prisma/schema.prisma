@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id            String   @id @db.VarChar(50)
+  name          String   @db.VarChar(100)
+  logo          String?  @db.VarChar(500)
+  themeConfig   Json?    @map("theme_config")
+  featuresConfig Json?   @map("features_config") 
+  contactInfo   Json?    @map("contact_info")
+  status        TenantStatus @default(ACTIVE)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  events        Event[]
+  orders        Order[]
+
+  @@map("tenants")
+}
+
+model User {
+  id        String     @id @db.VarChar(50)
+  openid    String     @unique @db.VarChar(100)
+  unionid   String?    @db.VarChar(100)
+  nickname  String?    @db.VarChar(100)
+  avatar    String?    @db.VarChar(500)
+  phone     String?    @db.VarChar(20)
+  realName  String?    @map("real_name") @db.VarChar(50)
+  gender    Int?       @db.TinyInt
+  city      String?    @db.VarChar(50)
+  province  String?    @db.VarChar(50)
+  country   String?    @db.VarChar(50)
+  status    UserStatus @default(ACTIVE)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  orders    Order[]
+
+  @@index([openid], map: "idx_openid")
+  @@map("users")
+}
+
+model Event {
+  id             String      @id @db.VarChar(50)
+  tenantId       String      @map("tenant_id") @db.VarChar(50)
+  title          String      @db.VarChar(200)
+  description    String?     @db.Text
+  poster         String?     @db.VarChar(500)
+  city           String      @db.VarChar(50)
+  venue          String      @db.VarChar(200)
+  address        String      @db.VarChar(500)
+  eventDate      DateTime    @map("event_date") @db.Date
+  eventTime      DateTime    @map("event_time") @db.Time
+  duration       Int         @default(90)
+  totalSeats     Int         @map("total_seats")
+  remainingSeats Int         @map("remaining_seats")
+  performers     Json
+  tags           Json
+  status         EventStatus @default(UPCOMING)
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
+
+  tenant         Tenant        @relation(fields: [tenantId], references: [id])
+  priceOptions   PriceOption[]
+  orders         Order[]
+
+  @@index([tenantId, eventDate], map: "idx_tenant_date")
+  @@index([status], map: "idx_status")
+  @@map("events")
+}
+
+model PriceOption {
+  id             String            @id @db.VarChar(50)
+  eventId        String            @map("event_id") @db.VarChar(50)
+  name           String            @db.VarChar(100)
+  price          Decimal           @db.Decimal(10, 2)
+  originalPrice  Decimal?          @map("original_price") @db.Decimal(10, 2)
+  description    String?           @db.VarChar(500)
+  totalCount     Int               @map("total_count")
+  remainingCount Int               @map("remaining_count")
+  sortOrder      Int               @default(0) @map("sort_order")
+  status         PriceOptionStatus @default(ACTIVE)
+  createdAt      DateTime          @default(now()) @map("created_at")
+
+  event          Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  orders         Order[]
+
+  @@index([eventId], map: "idx_event_id")
+  @@map("price_options")
+}
+
+model Order {
+  id            String      @id @db.VarChar(50)
+  tenantId      String      @map("tenant_id") @db.VarChar(50)
+  userId        String      @map("user_id") @db.VarChar(50)
+  eventId       String      @map("event_id") @db.VarChar(50)
+  priceOptionId String      @map("price_option_id") @db.VarChar(50)
+  quantity      Int
+  totalAmount   Decimal     @map("total_amount") @db.Decimal(10, 2)
+  userName      String      @map("user_name") @db.VarChar(100)
+  userPhone     String      @map("user_phone") @db.VarChar(20)
+  status        OrderStatus @default(PENDING)
+  payMethod     String?     @map("pay_method") @db.VarChar(50)
+  transactionId String?     @map("transaction_id") @db.VarChar(100)
+  paidAt        DateTime?   @map("paid_at")
+  cancelledAt   DateTime?   @map("cancelled_at")
+  refundedAt    DateTime?   @map("refunded_at")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  tenant        Tenant      @relation(fields: [tenantId], references: [id])
+  user          User        @relation(fields: [userId], references: [id])
+  event         Event       @relation(fields: [eventId], references: [id])
+  priceOption   PriceOption @relation(fields: [priceOptionId], references: [id])
+  tickets       Ticket[]
+
+  @@index([userId, tenantId], map: "idx_user_tenant")
+  @@index([status], map: "idx_status")
+  @@index([createdAt], map: "idx_created_at")
+  @@map("orders")
+}
+
+model Ticket {
+  id        String       @id @db.VarChar(50)
+  orderId   String       @map("order_id") @db.VarChar(50)
+  seatNo    String?      @map("seat_no") @db.VarChar(20)
+  qrCode    String       @unique @map("qr_code") @db.VarChar(200)
+  status    TicketStatus @default(VALID)
+  usedAt    DateTime?    @map("used_at")
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  order     Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId], map: "idx_order_id")
+  @@index([qrCode], map: "idx_qr_code")
+  @@map("tickets")
+}
+
+enum TenantStatus {
+  ACTIVE @map("active")
+  DISABLED @map("disabled")
+}
+
+enum UserStatus {
+  ACTIVE @map("active")
+  DISABLED @map("disabled")
+}
+
+enum EventStatus {
+  UPCOMING @map("upcoming")
+  ON_SALE @map("onSale")
+  SOLD_OUT @map("soldOut")
+  CANCELLED @map("cancelled")
+}
+
+enum PriceOptionStatus {
+  ACTIVE @map("active")
+  DISABLED @map("disabled")
+}
+
+enum OrderStatus {
+  PENDING @map("pending")
+  PAID @map("paid")
+  CANCELLED @map("cancelled")
+  REFUNDED @map("refunded")
+  USED @map("used")
+}
+
+enum TicketStatus {
+  VALID @map("valid")
+  USED @map("used")
+  EXPIRED @map("expired")
+}
