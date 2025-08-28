@@ -1,7 +1,7 @@
 {
   "name": "standup-backend",
   "version": "0.0.1",
-  "description": "",
+  "description": "脱口秀票务系统后端API",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
@@ -17,15 +17,22 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prisma:generate": "prisma generate",
+    "prisma:studio": "prisma studio",
+    "prisma:push": "prisma db push",
+    "prisma:migrate": "prisma migrate dev",
+    "setup": "pnpm install && pnpm prisma:generate && pnpm prisma:push"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/jwt": "^11.0.0",
+    "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^11.0.1",
     "@prisma/client": "^6.15.0",
+    "axios": "^1.6.2",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
