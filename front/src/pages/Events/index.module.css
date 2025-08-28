@@ -1,0 +1,81 @@
+.events {
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #001529;
+}
+
+.filters {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.eventTitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: #001529;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.eventMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+  color: #666;
+}
+
+.eventMeta span {
+  display: flex;
+  align-items: center;
+}
+
+.eventTime {
+  color: #666;
+  font-size: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .filters {
+    overflow-x: auto;
+  }
+  
+  .filters :global(.ant-space) {
+    flex-wrap: nowrap;
+    min-width: max-content;
+  }
+  
+  .eventMeta {
+    font-size: 11px;
+  }
+}
+
+/* Table 响应式 */
+@media (max-width: 576px) {
+  :global(.ant-table-tbody > tr > td) {
+    padding: 8px 4px;
+  }
+  
+  .eventTitle {
+    font-size: 14px;
+  }
+}

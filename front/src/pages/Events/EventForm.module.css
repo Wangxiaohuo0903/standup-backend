@@ -1,0 +1,84 @@
+.eventForm {
+  padding: 0;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  font-size: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #001529;
+}
+
+.priceCard {
+  margin-bottom: 16px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+}
+
+.priceCard :global(.ant-card-head) {
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.footer {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #f0f0f0;
+  text-align: right;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .footer {
+    text-align: center;
+  }
+  
+  .footer :global(.ant-space) {
+    width: 100%;
+  }
+  
+  .footer :global(.ant-btn) {
+    flex: 1;
+  }
+}
+
+/* Form 样式调整 */
+:global(.ant-form-item-label > label) {
+  font-weight: 500;
+  color: #001529;
+}
+
+:global(.ant-divider-horizontal.ant-divider-with-text) {
+  font-size: 16px;
+  font-weight: 600;
+  color: #001529;
+}
+
+/* PriceCard 响应式 */
+@media (max-width: 576px) {
+  .priceCard :global(.ant-card-extra) {
+    margin-top: 8px;
+  }
+}

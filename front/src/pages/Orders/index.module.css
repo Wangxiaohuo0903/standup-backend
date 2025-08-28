@@ -1,0 +1,141 @@
+.orders {
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #001529;
+}
+
+.filters {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.orderId {
+  font-family: 'Courier New', monospace;
+  font-weight: 500;
+  color: #1890ff;
+  cursor: pointer;
+}
+
+.eventInfo {
+  min-width: 150px;
+}
+
+.eventTitle {
+  font-weight: 500;
+  color: #001529;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.eventMeta {
+  font-size: 12px;
+  color: #666;
+}
+
+.quantity {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.phone {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.amount {
+  font-weight: 500;
+  color: #f5222d;
+}
+
+.time {
+  font-size: 12px;
+  color: #666;
+}
+
+/* 订单详情弹窗 */
+.orderDetail {
+  padding: 16px 0;
+}
+
+.ticketsSection {
+  margin-top: 24px;
+}
+
+.ticketsSection h4 {
+  margin-bottom: 16px;
+  color: #001529;
+}
+
+.tickets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.ticket {
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  padding: 12px;
+  background: #fafafa;
+}
+
+.ticketInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.ticketCode {
+  font-size: 12px;
+  color: #666;
+  font-family: 'Courier New', monospace;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .filters {
+    overflow-x: auto;
+  }
+  
+  .filters :global(.ant-space) {
+    flex-wrap: nowrap;
+    min-width: max-content;
+  }
+  
+  .eventInfo {
+    min-width: 120px;
+  }
+  
+  .tickets {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  :global(.ant-table-tbody > tr > td) {
+    padding: 8px 4px;
+  }
+  
+  .eventTitle {
+    font-size: 14px;
+  }
+  
+  .orderId {
+    font-size: 12px;
+  }
+}
